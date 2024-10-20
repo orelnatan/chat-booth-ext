@@ -1,0 +1,12 @@
+{
+  "manifest_version":3,
+  "name":"ChatBooth",
+  "description":"Counter app Easy to use",
+  "version": "1.0.0",
+  "action":{
+    "default_popup":"index.html"
+  },
+  "icons": {
+    "128": "./favicon.ico"
+  }
+}
