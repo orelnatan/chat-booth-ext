@@ -1,19 +1,19 @@
 import { Component } from '@angular/core';
-
-import { LayoutModule } from './shared/layout';
 import { RouterModule } from '@angular/router';
 
+import { LayoutModule } from '@chat-booth/shared/layout';
+
 @Component({
-  selector: 'app-root',
+  selector: 'core-root',
   standalone: true,
   imports: [
     RouterModule,
-    LayoutModule
+    LayoutModule,
   ],
   template: `
-    <root-layout forRoot>
-      <router-outlet></router-outlet>
+    <root-layout>
+      <router-outlet />
     </root-layout>
-  `
+  `,
 })
-export class AppRootComponent {}
+export class CoreRootComponent {}
