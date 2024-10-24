@@ -17,6 +17,11 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "optimization": {
+              "styles": {
+                "inlineCritical": false
+              }
+            },
             "outputPath": "dist/chat-booth-ext",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -26,6 +31,7 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
+              "src/manifest.json",
               {
                 "glob": "**/*",
                 "input": "public"
@@ -85,6 +91,7 @@
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
+              "src/manifest.json",
               {
                 "glob": "**/*",
                 "input": "public"

@@ -1,0 +1,17 @@
+Anable the extention to get the tabs and url: (without background.js file)
+
+getAllTabsInCurrentWindow(): void {
+    chrome.tabs.query({ currentWindow: true }, (tabs: any) => {
+      console.log('All tabs in current window:', tabs);
+    });
+  }
+
+  getCurrentUrl(): void {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs: any) => {
+      const currentTab = tabs[0]; // Get the active tab
+      if (currentTab) {
+        const currentUrl = currentTab.url || 'No URL available';
+        console.log('Current Tab URL:', currentUrl);
+      }
+    });
+  }
