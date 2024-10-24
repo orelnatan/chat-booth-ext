@@ -4,8 +4,18 @@
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
+    "baseUrl": "./",
+    "paths": {
+      "@chat-booth/core/*": ["src/app/core/*"],
+      "@chat-booth/shared/*": ["src/app/shared/*"],
+      "@chat-booth/auth/*": ["src/app/auth/*"],
+      "@chat-booth/home/*": ["src/app/home/*"],
+      "@chat-booth/env/*": ["src/environments/*"],
+      "@chat-booth/assets/*": ["src/assets/*"],
+    },
     "strict": true,
     "noImplicitOverride": true,
+    "strictPropertyInitialization": false,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,

@@ -1,0 +1,11 @@
+
+<div class="page-layout-main" 
+  [style.height.%]="fitHeightByContent ? 0 : null"
+  [style.width.%]="fitWidthByContent ? 0 : null"
+>  
+  <div class="page-layout-content"
+    [style.padding.px]="withoutPadding ? 0 : null"
+  >
+    <ng-content></ng-content>
+  </div>
+</div>

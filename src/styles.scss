@@ -1,11 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'assets/design-system/utils.scss';
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: heebo-regular;
+}
+
+body.lighten {
+  @include lighten();
+}
+
+body.darken {
+  @include darken();
 }
 
 body {
-  width: 500px;
+  width: 565px;
+  height: 600px;
+  background: var(--color-background);
 }
+

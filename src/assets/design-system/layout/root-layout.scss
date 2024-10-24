@@ -1,0 +1,20 @@
+
+%root-layout-main {
+  display: flex;
+  flex-direction: column;
+  height: $full-screen-height;
+  width: $full-screen-width;
+}
+
+%root-layout-body {
+  display: flex;
+  flex-direction: row;
+  width: $full-screen-width;
+  height: $full-screen-height;
+  overflow: hidden;
+}
+
+%root-layout-content {
+  width: $full-screen-width;
+  overflow: auto;
+}

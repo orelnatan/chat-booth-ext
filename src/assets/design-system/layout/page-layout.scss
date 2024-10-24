@@ -1,0 +1,14 @@
+
+%page-layout-main {
+  display: table; 
+  width: $full-screen-width;
+  height: $full-screen-height;
+}
+
+%page-layout-content {
+  display: table-cell;
+  padding: 15px;
+  width: $full-screen-width;
+  height: $full-screen-height;
+}
+
