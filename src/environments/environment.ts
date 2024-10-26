@@ -1,6 +1,6 @@
 
 export const environment = {
-  production: true,
+  production: false,
   firebase: {
     apiKey: "AIzaSyC7vUfK1LySvGoOmg8RPiAndjAGxe7X0yI",
     authDomain: "chat-booth-server-v0.firebaseapp.com",

@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [
     RouterModule,
-    LayoutModule
+    LayoutModule,
   ],
   template: `
     <root-layout forRoot>

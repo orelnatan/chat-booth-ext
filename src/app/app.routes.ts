@@ -10,7 +10,7 @@ export const routes: Routes = [
   },
   { 
     path: '',
-    loadComponent: () => import('./core/core.root.component').then(core => core.CoreRootComponent),
+    loadComponent: () => import('./core/core-root.component').then(core => core.CoreRootComponent),
     children: [ ...coreRoutes ]
   },
 ];

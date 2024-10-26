@@ -1,17 +1,37 @@
-Anable the extention to get the tabs and url: (without background.js file)
+Enable the extention to get the tabs and url: (without background.js file)
 
 getAllTabsInCurrentWindow(): void {
-    chrome.tabs.query({ currentWindow: true }, (tabs: any) => {
-      console.log('All tabs in current window:', tabs);
-    });
-  }
+  chrome.tabs.query({ currentWindow: true }, (tabs: any) => {
+    console.log('All tabs in current window:', tabs);
+  });
+}
 
-  getCurrentUrl(): void {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs: any) => {
-      const currentTab = tabs[0]; // Get the active tab
-      if (currentTab) {
-        const currentUrl = currentTab.url || 'No URL available';
-        console.log('Current Tab URL:', currentUrl);
-      }
+getCurrentUrl(): void {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs: any) => {
+    const currentTab = tabs[0]; // Get the active tab
+    if (currentTab) {
+      const currentUrl = currentTab.url || 'No URL available';
+      console.log('Current Tab URL:', currentUrl);
+    }
+  });
+}
+
+Enable the extention to get the tabs: (with background.js file)
+
+getAllTabsInCurrentWindow(): void {
+  chrome.runtime.sendMessage({ action: 'getAllTabs' }, (response) => {
+    if (response) {
+      console.log('All tabs from background:', response);
+    }
+  });
+}
+
+background.js
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'getAllTabs') {
+    chrome.tabs.query({ currentWindow: true }, (tabs) => {
+      sendResponse({ tabs: tabs });  // Always send a response
     });
+    return true;  // Keep the message channel open for async response
   }
+});
