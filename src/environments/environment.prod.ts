@@ -1,13 +1,6 @@
+import { Environment } from "@chat-booth/core/models";
 
-export const environment = {
+export const environment: Environment = {
   production: true,
-  firebase: {
-    apiKey: "AIzaSyC7vUfK1LySvGoOmg8RPiAndjAGxe7X0yI",
-    authDomain: "chat-booth-server-v0.firebaseapp.com",
-    projectId: "chat-booth-server-v0",
-    storageBucket: "chat-booth-server-v0.appspot.com",
-    messagingSenderId: "62660379265",
-    appId: "1:62660379265:web:9167b367fe74f3eb924380",
-    measurementId: "G-HV505G2ZWX"
-  }
+  baseUrl: "http://localhost:4200/",
 };

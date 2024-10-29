@@ -16,7 +16,9 @@ import { GUser, GUserCredential } from '@chat-booth/shared/firebase';
 export class LoginPageComponent {
   user: GUser | null = null;
 
-  constructor(private readonly googleAuthService: GoogleAuthService) {
+  constructor(
+    private readonly googleAuthService: GoogleAuthService,
+  ) {
     this.googleAuthService.getCurrentUser().subscribe(user => {
       this.user = user;
 

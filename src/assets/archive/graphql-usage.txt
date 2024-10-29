@@ -1,0 +1,29 @@
+import { Apollo, gql } from "apollo-angular";
+
+const GET_DRAGONS = gql `
+  query Dragons {
+    dragons {
+      name
+      first_flight
+      diameter {
+        feet
+      }
+      launch_payload_mass {
+        lb
+      }
+    }
+  }
+`;
+
+ constructor(
+  private readonly apollo: Apollo
+ ) {} 
+
+
+loadDragons() {  
+    this.apollo.watchQuery({
+      query: GET_DRAGONS
+    }).valueChanges.subscribe(({data, error} : any) => {
+      console.log(data)
+    })
+  }
