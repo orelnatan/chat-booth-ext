@@ -1,0 +1,10 @@
+
+constructor(
+    @Inject(DOCUMENT) private document: Document,
+  ) {}
+  
+  ngOnInit(): void {
+    this.document.body.classList.add("hyperion");
+
+    this.document.body.classList.remove("aurora");
+  }

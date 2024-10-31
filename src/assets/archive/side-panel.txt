@@ -1,0 +1,34 @@
+background.js
+
+// Allows users to open the chrome side-panel by clicking on the action toolbar icon.
+chrome.sidePanel
+  .setPanelBehavior({ openPanelOnActionClick: true })
+  .catch((error) => console.error(error));
+
+// Allows the extension to be shown under the right-click chrome menu. 
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.contextMenus.create({
+    id: "openSidePanel",
+    title: "Open ChatBooth",
+    contexts: ["all"]
+  })
+})
+
+// Allows the extension to be open from the right-click chrome menu.
+chrome.contextMenus?.onClicked.addListener(async (info, tab) => {
+  if (info.menuItemId === "openSidePanel") {
+    await chrome.sidePanel.open({ tabId: tab.id, windowId: tab.windowId })
+  }
+})
+
+
+manifest.json
+
+"side_panel": {
+  "default_path": "index.html"
+},
+"permissions": [
+  "sidePanel",
+  "contextMenus",
+  ...
+]

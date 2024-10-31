@@ -4,7 +4,6 @@
   "description": "ChatBooth app Easy to use",
   "version": "1.0.0",
   "action": {
-    "default_popup": "index.html",
     "default_icon": {
       "16": "./favicon-16.png",
       "48": "./favicon-48.png",
@@ -14,7 +13,15 @@
   "background": {
     "service_worker": "chrome/background.js"
   },
+  "side_panel": {
+    "default_path": "index.html"
+  },
   "permissions": [
-    "tabs"
+    "tabs",
+    "sidePanel",
+    "activeTab",
+    "storage",
+    "contextMenus",
+    "webNavigation"
   ]
 }

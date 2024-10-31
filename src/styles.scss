@@ -8,17 +8,15 @@
   font-family: heebo-regular;
 }
 
-body.lighten {
-  @include lighten();
+body.hyperion {
+  @include hyperion();
 }
 
-body.darken {
-  @include darken();
+body.aurora {
+  @include aurora();
 }
 
 body {
-  width: 565px;
-  height: 600px;
   background: var(--color-background);
 }
 
