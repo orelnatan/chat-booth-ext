@@ -1,0 +1,9 @@
+<html>
+  <head>
+    <title>Offscreen Authentication</title>
+  </head>
+  <body>
+    Offscreen Authentication
+    <script type="module" src="../chrome/offscreen-auth.js"></script>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, booleanAttribute } from '@angular/core';
 
 @Component({
   selector: 'page-layout',
@@ -6,8 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./page-layout.component.scss'],
 })
 export class PageLayoutComponent {  
-  @Input() fitWidthByContent: boolean;
-  @Input() fitHeightByContent: boolean;
-
-  @Input() withoutPadding: boolean;
+  @Input({ transform: booleanAttribute }) fitWidthByContent: boolean;
+  @Input({ transform: booleanAttribute }) fitHeightByContent: boolean;
+  @Input({ transform: booleanAttribute }) withoutPadding: boolean;
 }

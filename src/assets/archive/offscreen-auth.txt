@@ -1,0 +1,45 @@
+import { initializeApp } from "./firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "./firebase-auth.js";
+
+console.log("Offscreen Authentication Screen Loaded Successfully!!");
+console.log("Resources Loaded Successfully!!", getAuth, signInWithPopup, GoogleAuthProvider, initializeApp);
+
+const FIREBASE_CONFIG = {
+  "apiKey": "AIzaSyC7vUfK1LySvGoOmg8RPiAndjAGxe7X0yI",
+  "authDomain": "chat-booth-server-v0.firebaseapp.com",
+  "projectId": "chat-booth-server-v0",
+  "storageBucket": "chat-booth-server-v0.appspot.com",
+  "messagingSenderId": "62660379265",
+  "appId": "1:62660379265:web:9167b367fe74f3eb924380",
+  "measurementId": "G-HV505G2ZWX"
+};
+
+console.log("Initializing Firebase app with config:", FIREBASE_CONFIG);
+
+const app = initializeApp(FIREBASE_CONFIG);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+console.log("Initializing Firebase components:", app, auth, provider);
+
+// Trigger sign-in with popup
+signInWithPopup(auth, provider)
+  .then((result) => {
+    // User signed in successfully
+    console.log("User signed in:", result.user);
+
+    // Send message back to background.js or handle the user data
+    chrome.runtime.sendMessage({
+      type: 'AUTH_SUCCESS',
+      user: result.user
+    });
+  })
+  .catch((error) => {
+    // Handle errors here
+    console.error("Error during sign-in:", error);
+    chrome.runtime.sendMessage({
+      type: 'AUTH_ERROR',
+      error: error.message
+    });
+  });
+

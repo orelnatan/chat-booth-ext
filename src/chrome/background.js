@@ -1,3 +1,12 @@
+let activeLoginTabId;
+
+const ORIGIN = "GLaDOS";
+
+const GOOGLE_LOGIN_URL = "http://localhost:4200/auth/login-with-google";
+
+const CONTEXT_MENUS_ID = "openSidePanel";
+const CONTEXT_MENUS_TITLE = "Open ChatBooth";
+const CONTEXT_MENUS_ALL = "all";
 
 // Allows users to open the chrome side-panel by clicking on the action toolbar icon.
 chrome.sidePanel
@@ -7,53 +16,49 @@ chrome.sidePanel
 // Allows the extension to be shown under the right-click chrome menu. 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
-    id: "openSidePanel",
-    title: "Open ChatBooth",
-    contexts: ["all"]
+    id: CONTEXT_MENUS_ID,
+    title: CONTEXT_MENUS_TITLE,
+    contexts: [CONTEXT_MENUS_ALL]
   })
 })
 
 // Allows the extension to be open from the right-click chrome menu.
 chrome.contextMenus?.onClicked.addListener(async (info, tab) => {
-  if (info.menuItemId === "openSidePanel") {
+  if (info.menuItemId === CONTEXT_MENUS_ID) {
     await chrome.sidePanel.open({ tabId: tab.id, windowId: tab.windowId })
   }
 })
 
-// Listen for tab activation(init) - when switching to another existing tab.
-chrome.tabs.onActivated.addListener((activeInfo) => {
-  chrome.tabs.get(activeInfo.tabId, (tab) => {
-    chrome.runtime.sendMessage({ activeTabUrl: tab.url });
-  });
-});
+// Listen to registered external tabs close events.
+chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
+  if (tabId === activeLoginTabId) {
+    activeLoginTabId = null; 
 
-// Listen for extension init, get the initial active tab URL - when the extension is first open.
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.message === "getCurrentTabUrl") {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      sendResponse({ activeTabUrl: tabs[0].url });
-    });
-    return true; 
+    chrome.runtime.sendMessage({ type: "LOGIN_SESSION_CLOSED" });
   }
 });
 
-// Listen for URL changes within a tab - when the tab is refreshed.
-chrome.webNavigation.onCommitted.addListener((details) => {
-  if (details.frameId === 0) {
-    chrome.tabs.get(details.tabId, (tab) => {
-      // Exclude devtools internal Chrome pages
-      if (!tab.url.startsWith("devtools://")) {
-        chrome.runtime.sendMessage({ activeTabUrl: tab.url });
-      }
+// Listen to social media login actions - Google/Facebook/Apple etc...
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'GOOGLE_LOGIN') {
+    chrome.tabs.create({ url: GOOGLE_LOGIN_URL}, tab => {
+      activeLoginTabId = tab.id;
     });
   }
 });
 
-// Listen for in-page URL changes - when moving between pages inside the same website.
-chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
-  if (details.frameId === 0) { 
-    chrome.tabs.get(details.tabId, (tab) => {
-      chrome.runtime.sendMessage({ activeTabUrl: tab.url });
-    });
+// Listen to external signals from GLaDOS...
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // Verify that the signal originated from GLaDOS(and not from other entity in background.js file)
+  if(message.source === ORIGIN) {  
+    if(message.type === "LOGIN_SUCCESS") {
+      sendResponse(message);
+    }
+
+    if(message.type === "LOGIN_FAILED") {
+      sendResponse(message);
+    }
+    // Close GLaDOS after login resposne.
+    chrome.tabs.remove(activeLoginTabId);
   }
 });

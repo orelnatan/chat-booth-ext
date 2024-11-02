@@ -8,6 +8,8 @@ import {
   LayoutFooterComponent,
 } from './components';
 
+import { LayoutService } from './services';
+
 @NgModule({
   declarations: [
     RootLayoutComponent,
@@ -22,6 +24,7 @@ import {
     LayoutHeaderComponent,
     LayoutSidebarComponent,
     LayoutFooterComponent
-  ]
+  ],
+  providers: [LayoutService]
 })
 export class LayoutModule {}

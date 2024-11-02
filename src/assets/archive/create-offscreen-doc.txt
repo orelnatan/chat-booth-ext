@@ -1,0 +1,88 @@
+
+background.js
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'START_AUTH') {
+    createOffscreenDocument();
+  }
+});
+
+async function createOffscreenDocument() {
+  if (await chrome.offscreen.hasDocument()) {
+    console.log("Offscreen document already exists, closing it first...");
+    await chrome.offscreen.closeDocument();
+  }
+
+  console.log("Creating a new offscreen document...", chrome.runtime.getURL("../chrome/offscreen.html"));
+  await chrome.offscreen.createDocument({
+    url: chrome.runtime.getURL("../chrome/offscreen.html"),
+    reasons: [chrome.offscreen.Reason.DOM_PARSER],
+    justification: "Required for Google sign-in with Firebase authentication"
+  });
+  console.log("Offscreen document created successfully.");
+}
+
+// // Listen for the auth result from offscreen
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.type === 'AUTH_SUCCESS') {
+    console.log('User signed in:', message.user);
+    // Send this data to the Angular app as needed
+  } else if (message.type === 'AUTH_ERROR') {
+    console.error('Authentication failed:', message.error);
+  }
+});
+
+
+offscreen.html
+
+<html lang="en">
+  <head>
+    <title>Offscreen Authentication</title>
+  </head>
+  <body>
+    Offscreen Authentication
+    <script type="module">
+      console.log("Load Firebase scripts as modules");
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-app.js";
+      import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js";
+
+      const FIREBASE_CONFIG = {
+        "apiKey": "AIzaSyC7vUfK1LySvGoOmg8RPiAndjAGxe7X0yI",
+        "authDomain": "chat-booth-server-v0.firebaseapp.com",
+        "projectId": "chat-booth-server-v0",
+        "storageBucket": "chat-booth-server-v0.appspot.com",
+        "messagingSenderId": "62660379265",
+        "appId": "1:62660379265:web:9167b367fe74f3eb924380",
+        "measurementId": "G-HV505G2ZWX"
+      }
+      
+      console.log("Loading Firebase config and initializing app...", FIREBASE_CONFIG);
+
+      const app = initializeApp(FIREBASE_CONFIG);
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
+
+      console.log("Check for existing sign-in results");
+      getRedirectResult(auth)
+        .then((result) => {
+          if (result) {
+            console.log("User signed in:", result.user);
+            chrome.runtime.sendMessage({
+              type: 'AUTH_SUCCESS',
+              user: result.user
+            });
+          } else {
+            console.log("No existing user session, starting sign-in redirect...");
+            signInWithRedirect(auth, provider);
+          }
+        })
+        .catch((error) => {
+          console.error("Authentication error:", error);
+          chrome.runtime.sendMessage({
+            type: 'AUTH_ERROR',
+            error: error.message
+          });
+        });
+    </script>
+  </body>
+</html>

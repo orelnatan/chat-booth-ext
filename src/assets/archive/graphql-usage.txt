@@ -27,3 +27,24 @@ loadDragons() {
       console.log(data)
     })
   }
+
+
+  ////////////////////////////////////////////////////////////////////
+
+
+  const GET_USER = gql`
+  query User($id: String!) {
+    getUser(id: $id) {
+      email
+    }
+  }
+`;
+
+ this.apollo.query({
+      query: GET_USER,
+      variables: {
+        id: "jc5pzl3pjtcen2HoWWZm"
+      }
+    }).subscribe(({data, error} : any) => {
+      console.log(data)
+    })

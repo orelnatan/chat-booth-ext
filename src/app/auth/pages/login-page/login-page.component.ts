@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, signal } from '@angular/core';
+import { Apollo } from "apollo-angular";
 
-import { GoogleAuthService } from '@chat-booth/auth/services';
+import { ChromeMessageType, ChromeMessage } from '@chat-booth/core/models';
 import { LayoutModule } from '@chat-booth/shared/layout';
-import { GUser, GUserCredential } from '@chat-booth/shared/firebase';
 
 @Component({
   selector: 'login-page',
@@ -14,27 +14,41 @@ import { GUser, GUserCredential } from '@chat-booth/shared/firebase';
   styleUrl: './login-page.component.scss'
 })
 export class LoginPageComponent {
-  user: GUser | null = null;
+  inProgress = signal(false);
 
   constructor(
-    private readonly googleAuthService: GoogleAuthService,
+    private readonly cd: ChangeDetectorRef
   ) {
-    this.googleAuthService.getCurrentUser().subscribe(user => {
-      this.user = user;
+    chrome.runtime.onMessage.addListener((message: ChromeMessage) => {
+      if (message.type === ChromeMessageType.LoginSuccess) {
+        this.loginSuccess(message);
+      }
 
-      console.log(this.user)
+      if (message.type === ChromeMessageType.LoginFailed) {
+        this.loginFailed(message);
+      }
+
+      if (message.type === ChromeMessageType.LoginSessionClosed) {
+        this.loginSessionClosed();
+      }
     });
   } 
 
-  login() {
-    this.googleAuthService.login().then((user: GUserCredential) => {
-      console.log(user)
-    });
+  loginWithGoogle(): void {
+    this.inProgress.set(true);
+
+    chrome.runtime.sendMessage({ type: ChromeMessageType.GoogleLogin } as ChromeMessage);
   }
 
-  logout() {
-    this.googleAuthService.logout().then(() => {
-      console.log("Logged Out")
-    });
+  loginSuccess(message: ChromeMessage): void {
+    console.log("Success", message);
+  }
+
+  loginFailed(message: ChromeMessage): void {
+    console.log("Failed", message);
+  }
+
+  loginSessionClosed(): void {
+    this.inProgress.set(false);
   }
 }

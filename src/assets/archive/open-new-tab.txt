@@ -1,0 +1,35 @@
+
+const authWindow = window.open("http://localhost:4200", "_blank") as Window;
+
+const authWindowInterval = setInterval(() => {
+  if (authWindow.closed) {
+    clearInterval(authWindowInterval)
+    
+    console.log("closed")
+  }
+}, 500)
+
+
+OR
+
+loginWithGoogle(): void {
+  chrome.runtime.sendMessage({ type: 'GOOGLE_LOGIN' });
+}
+
+// Listen to social media login actions - Google/Facebook/Apple etc...
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'GOOGLE_LOGIN') {
+    chrome.tabs.create({ url: "http://localhost:4200" }, (tab) => {
+      googleLoginTabId = tab.id;
+    });
+  }
+});
+
+// Listen to registered external tabs close events.
+chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
+  if (tabId === googleLoginTabId) {
+    googleLoginTabId = null; 
+
+    console.log("Google login tab was closed", removeInfo);
+  }
+});

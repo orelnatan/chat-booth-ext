@@ -1,16 +1,16 @@
 
 background.js
 
-// Listen for tab activation(init) - when switching to another existing tab.
+// Listen to tab activation(init) - when switching to another existing tab.
 chrome.tabs.onActivated.addListener((activeInfo) => {
   chrome.tabs.get(activeInfo.tabId, (tab) => {
     chrome.runtime.sendMessage({ activeTabUrl: tab.url });
   });
 });
 
-// Listen for extension init, get the initial active tab URL - when the extension is first open.
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.message === "getCurrentTabUrl") {
+// Listen to extension init, get the initial active tab URL - when the extension is first open.
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "CURRENT_TAB_URL") {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       sendResponse({ activeTabUrl: tabs[0].url });
     });
@@ -18,7 +18,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
-// Listen for URL changes within a tab - when the tab is refreshed.
+// Listen to URL changes within a tab - when the tab is refreshed.
 chrome.webNavigation.onCommitted.addListener((details) => {
   if (details.frameId === 0) {
     chrome.tabs.get(details.tabId, (tab) => {
@@ -30,7 +30,7 @@ chrome.webNavigation.onCommitted.addListener((details) => {
   }
 });
 
-// Listen for in-page URL changes - when moving between pages inside the same website.
+// Listen to in-page URL changes - when moving between pages inside the same website.
 chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
   if (details.frameId === 0) { 
     chrome.tabs.get(details.tabId, (tab) => {
@@ -39,22 +39,39 @@ chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
   }
 });
 
-Component...
+///////////////////////////////////////////////////////////////////////////////////////////////
 
-ngOnInit(): void {
-  // Get the current URL when the extension loads - on extension init. (will fire only once)
-  chrome.runtime.sendMessage({ message: "getCurrentTabUrl" }, (response) => {
-    console.log("Initial active tab URL:", response.activeTabUrl);
-  });
+Service... ChromeUrlService
 
-  // Get the current URL when: moving between pages, tab is refreshed, switching to another tab, etc... (will fire many times)
-  chrome.runtime.onMessage.addListener((message) => {
-  if (message.activeTabUrl) {
-    console.log("Active tab URL:", message.activeTabUrl);
+import { Injectable } from "@angular/core";
+import { BehaviorSubject } from 'rxjs';
+
+import { ChromeMessageType } from "../models";
+
+@Injectable()
+export class ChromeUrlService {
+  private _url$: BehaviorSubject<string> = new BehaviorSubject<string>("");
+
+  constructor() {
+    // Get the current URL when the extension loads - on extension init. (will fire only once)
+    chrome.runtime.sendMessage({ type: ChromeMessageType.CurrentTabUrl }, (response) => {   //  TODO - Add type to response
+      this._url$.next(response.activeTabUrl);
+    });
+
+    // Get the current URL when moving between pages, tab is refreshed, switching to another tab, etc... (will fire many times)
+    chrome.runtime.onMessage.addListener((message) => {   //  TODO - Add type to message
+      if (message.activeTabUrl) {
+        this._url$.next(message.activeTabUrl);
+      }
+    });
   }
-});
 
+  get url$(): BehaviorSubject<string> {
+    return this._url$;
+  }
+}
 
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 manifest.json
 

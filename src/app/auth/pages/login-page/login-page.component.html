@@ -1,10 +1,11 @@
 
 <page-layout>
   <div class="login-page-main">
+    <span>{{ inProgress() }}</span>
     <form>
-      <button type="button" (click)="login()">Connect with Google</button>
+      <button type="button" (click)="loginWithGoogle()">Connect with Google</button>
       <br />
-      <button type="button" (click)="logout()">Logout from Google</button>
+      <button type="button">Logout from Google</button>
     </form>
   </div>
 </page-layout>

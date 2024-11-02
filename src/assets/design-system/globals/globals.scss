@@ -1,4 +1,16 @@
 
+.show-for-lg {
+  @media screen and (max-width: $breakpoint-sm) {
+    display: none !important;
+  }
+}
+
+.show-for-sm {
+  @media screen and (min-width: $breakpoint-sm) {
+    display: none !important;
+  }
+}
+
 a {
   text-decoration: underline;
   cursor: pointer;
