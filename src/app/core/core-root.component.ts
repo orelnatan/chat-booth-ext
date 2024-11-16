@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { LayoutModule } from '@chat-booth/shared/layout';
 
-import { ChromeUrlService } from './services';
+import { ChromeUrlCycleHooksService } from './services';
 
 @Component({
   selector: 'core-root',
@@ -16,7 +16,7 @@ import { ChromeUrlService } from './services';
     LayoutModule,
   ],
   providers: [
-    ChromeUrlService
+    ChromeUrlCycleHooksService
   ],
   template: `
     <root-layout>
@@ -29,5 +29,5 @@ import { ChromeUrlService } from './services';
   `,
 })
 export class CoreRootComponent {
-  url$: BehaviorSubject<string> = inject(ChromeUrlService).url$;
+  url$: BehaviorSubject<string> = inject(ChromeUrlCycleHooksService).url$;
 }

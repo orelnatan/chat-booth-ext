@@ -1,5 +1,5 @@
 
-export enum Origin {
+export enum MessageOrigin {
   GLaDOS = "GLaDOS",
   ChatBooth = "CHAT_BOOTH"
 }

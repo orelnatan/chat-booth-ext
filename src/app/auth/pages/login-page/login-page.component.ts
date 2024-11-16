@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component, signal } from '@angular/core';
+import { Component, WritableSignal, signal } from '@angular/core';
 import { Apollo } from "apollo-angular";
 
-import { ChromeMessageType, ChromeMessage } from '@chat-booth/core/models';
+import { ChromeMessage, MessageType } from '@chat-booth/core/models';
 import { LayoutModule } from '@chat-booth/shared/layout';
 
 @Component({
@@ -14,21 +14,21 @@ import { LayoutModule } from '@chat-booth/shared/layout';
   styleUrl: './login-page.component.scss'
 })
 export class LoginPageComponent {
-  inProgress = signal(false);
+  inProgress: WritableSignal<boolean> = signal(false);
 
   constructor(
-    private readonly cd: ChangeDetectorRef
+    private readonly apollo: Apollo
   ) {
     chrome.runtime.onMessage.addListener((message: ChromeMessage) => {
-      if (message.type === ChromeMessageType.LoginSuccess) {
+      if (message.type === MessageType.LoginSuccess) {
         this.loginSuccess(message);
       }
 
-      if (message.type === ChromeMessageType.LoginFailed) {
+      if (message.type === MessageType.LoginFailed) {
         this.loginFailed(message);
       }
 
-      if (message.type === ChromeMessageType.LoginSessionClosed) {
+      if (message.type === MessageType.LoginSessionClosed) {
         this.loginSessionClosed();
       }
     });
@@ -37,7 +37,7 @@ export class LoginPageComponent {
   loginWithGoogle(): void {
     this.inProgress.set(true);
 
-    chrome.runtime.sendMessage({ type: ChromeMessageType.GoogleLogin } as ChromeMessage);
+    chrome.runtime.sendMessage({ type: MessageType.GoogleLogin } as ChromeMessage);
   }
 
   loginSuccess(message: ChromeMessage): void {

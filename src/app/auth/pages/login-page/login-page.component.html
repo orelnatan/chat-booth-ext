@@ -3,7 +3,7 @@
   <div class="login-page-main">
     <span>{{ inProgress() }}</span>
     <form>
-      <button type="button" (click)="loginWithGoogle()">Connect with Google</button>
+      <button type="button" [disabled]="inProgress()" (click)="loginWithGoogle()">Connect with Google</button>
       <br />
       <button type="button">Logout from Google</button>
     </form>

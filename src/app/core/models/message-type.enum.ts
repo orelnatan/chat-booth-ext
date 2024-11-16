@@ -1,5 +1,5 @@
 
-export enum ChromeMessageType {
+export enum MessageType {
   GoogleLogin = "GOOGLE_LOGIN",
   LoginSuccess = "LOGIN_SUCCESS",
   LoginFailed = "LOGIN_FAILED",
