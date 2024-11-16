@@ -19,7 +19,7 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 // Listen to social media login actions - Google/Facebook/Apple etc...
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'GOOGLE_LOGIN') {
-    chrome.tabs.create({ url: GOOGLE_LOGIN_URL}, tab => {
+    chrome.tabs.create({ url: GOOGLE_LOGIN_URL }, tab => {
       activeLoginTabId = tab.id;
     });
   }

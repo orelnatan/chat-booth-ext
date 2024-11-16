@@ -13,7 +13,7 @@
       "@chat-booth/env/*": ["src/environments/*"],
       "@chat-booth/assets/*": ["src/assets/*"],
     },
-    "strict": true,
+    "strict": false,
     "noImplicitAny": false,
     "noImplicitOverride": true,
     "strictPropertyInitialization": false,

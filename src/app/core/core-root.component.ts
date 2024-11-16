@@ -29,5 +29,5 @@ import { ChromeUrlCycleHooksService } from './services';
   `,
 })
 export class CoreRootComponent {
-  url$: BehaviorSubject<string> = inject(ChromeUrlCycleHooksService).url$;
+  url$: BehaviorSubject<string>; ///= inject(ChromeUrlCycleHooksService).url$;
 }
