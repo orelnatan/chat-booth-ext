@@ -11,7 +11,7 @@ export class ChromeUrlCycleHooksService {
     // Get the current URL when the extension loads - on extension init. (will fire only once)
     chrome.runtime.sendMessage({ type: MessageType.CurrentTabUrl } as ChromeMessage, (response: ChromeMessage) => { 
       if(response.type === MessageType.CurrentTabUrl) {
-        this._url$.next(response.payload!['activeTabUrl']);
+        this._url$.next(response.payload['activeTabUrl']);
       }
     });
 
@@ -19,7 +19,7 @@ export class ChromeUrlCycleHooksService {
     chrome.runtime.onMessage.addListener((message: ChromeMessage) => {
       if(message.type === MessageType.CurrentTabUrl) {
         if (message.payload!['activeTabUrl']) {
-          this._url$.next(message.payload!['activeTabUrl']);
+          this._url$.next(message.payload['activeTabUrl']);
         }
       }
     });

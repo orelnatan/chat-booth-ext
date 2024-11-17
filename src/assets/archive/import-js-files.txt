@@ -1,0 +1,13 @@
+
+By GPT:
+
+To import a JavaScript file like background-message.enum.js into a TypeScript file, you can follow these steps:
+
+Ensure Compatibility: Make sure TypeScript recognizes JavaScript files by updating the TypeScript configuration (tsconfig.json) to allow JavaScript imports:
+
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false
+  }
+}

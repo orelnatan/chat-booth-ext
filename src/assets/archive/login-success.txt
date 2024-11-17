@@ -1,0 +1,17 @@
+
+loginSuccess(credentials: AuthCredentials): void {
+  chrome.storage.local.get(['uid', 'idToken']).then((data) => {
+    console.log(data)
+  });
+
+  this.authService.authenticateUserByIdToken(credentials.idToken)
+    .subscribe((authorized: boolean): void => {
+      console.log("loginSuccess: ", authorized, credentials);
+
+      if(authorized) {
+        console.log("Success :), ");
+      } else {
+        console.log("Sorry, you are not authorized :(");
+      }
+  })
+}
