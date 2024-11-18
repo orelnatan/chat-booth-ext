@@ -26,7 +26,8 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
 
-## Build using chrom config
+## Build using chrom config => Mac Or Windows
+
 ## package.json config for Mac: `"build:chrome": "ng build --configuration production && cp src/manifest.json dist/chat-booth-ext/browser/manifest.json && cp -r src/chrome dist/chat-booth-ext/browser"`
 
 ## package.json config for Windows: `"build:chrome": "ng build --configuration production && copy src\\manifest.json dist\\chat-booth-ext\\browser\\manifest.json && xcopy src\\chrome dist\\chat-booth-ext\\browser\\chrome /E /I /Y"`

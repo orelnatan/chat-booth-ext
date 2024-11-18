@@ -1,15 +1,9 @@
 import { Injectable } from "@angular/core";
-import { Apollo, MutationResult, gql } from "apollo-angular";
+import { Apollo, MutationResult } from "apollo-angular";
 import { Observable, map } from "rxjs";
-import { AuthStatus } from "../models/auth-status.interface";
 
-const AUTHENTICATE_USER = gql`
-  mutation login($idToken: String!) {
-    login(idToken: $idToken) {
-      authorized
-    }
-  }
-`;
+import { AUTHENTICATE_USER } from "./gql-actions.gql";
+import { AuthStatus } from "../models";
 
 @Injectable()
 export class AuthService {
@@ -18,13 +12,14 @@ export class AuthService {
   ) {}
   
   authenticateUserByIdToken(idToken: string): Observable<boolean> {
-    return this.apollo.mutate<AuthStatus>({
+    return this.apollo.mutate<{ login: AuthStatus }>({
       mutation: AUTHENTICATE_USER,
       variables: { idToken }
     }).pipe(
-      map((authStatus: MutationResult<AuthStatus>): boolean => {
-        return authStatus.data.authorized;
+      map((response: MutationResult<{ login: AuthStatus }>): boolean => {
+        return response.data?.login.authorized;
       })
-    )
+    );
   }
 }
+

@@ -1,2 +1,2 @@
 
-export { LoginPageModule } from './login-page';
+export { LoginPageComponent, LOGIN_PAGE_ROUTES } from './login-page';

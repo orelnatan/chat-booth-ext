@@ -1,7 +1,10 @@
 import { Component, OnDestroy, OnInit, WritableSignal, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { FirebaseError } from 'firebase/app';
+import { ApolloError } from 'apollo-server-errors';
 
-import { ChromeMessage, MessageType } from '@chat-booth/core/models';
+import { UserStateService } from '@chat-booth/core/services';
+import { ChromeMessage, MessageType, User } from '@chat-booth/core/models';
 import { LayoutModule } from '@chat-booth/shared/layout';
 import { AuthService } from '@chat-booth/auth/services';
 import { AuthCredentials } from '@chat-booth/auth/models';
@@ -19,7 +22,7 @@ import { AuthCredentials } from '@chat-booth/auth/models';
 export class LoginPageComponent implements OnInit, OnDestroy {
   inProgress: WritableSignal<boolean> = signal(false);
 
-  chromeRuntimeListener = (message: ChromeMessage) => {
+  chromeRuntimeListener = (message: ChromeMessage): void => {
     if (message.type === MessageType.LoginSuccess) {
       this.loginSuccess(<AuthCredentials>message.payload);
     }
@@ -34,7 +37,9 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   };
 
   constructor(
+    private readonly userStateService: UserStateService,
     private readonly authService: AuthService,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {
@@ -52,11 +57,25 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   }
 
   loginSuccess(credentials: AuthCredentials): void {
-    console.log("Success ", credentials);
-  }
+    this.authService.authenticateUserByIdToken(credentials.idToken).subscribe({
+      next: (): void => {
+        this.userStateService.fetchUserByCredentials(credentials).subscribe({
+          next: () => {
+            this.router.navigate(['/home']);
+          },
+          error: (error: ApolloError) => {
+            this.loginFailed(error);
+          }
+        })
+      },
+      error: (error: ApolloError): void => {
+        this.loginFailed(error);
+      },
+    } 
+  )}
 
-  loginFailed(error: FirebaseError): void {
-    console.log("Error ", error);
+  loginFailed(error: FirebaseError | ApolloError): void {
+    console.error("Error ", error);
   }
 
   loginSessionClosed(): void {

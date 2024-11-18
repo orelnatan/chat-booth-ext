@@ -3,7 +3,9 @@ import { BehaviorSubject } from 'rxjs';
 
 import { ChromeMessage, MessageType } from "../models";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ChromeUrlCycleHooksService {
   private _url$: BehaviorSubject<string> = new BehaviorSubject<string>("");
 
@@ -15,10 +17,10 @@ export class ChromeUrlCycleHooksService {
       }
     });
 
-    // Get the current URL when moving between pages, tab is refreshed, switching to another tab, etc... (will fire many times)
+    // Get the current URL when - moving between pages / tab is refreshed / switching to another tab, etc... (will fire many times)
     chrome.runtime.onMessage.addListener((message: ChromeMessage) => {
       if(message.type === MessageType.CurrentTabUrl) {
-        if (message.payload!['activeTabUrl']) {
+        if (message.payload['activeTabUrl']) {
           this._url$.next(message.payload['activeTabUrl']);
         }
       }

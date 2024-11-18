@@ -1,16 +1,26 @@
 import { Routes } from '@angular/router';
 
-import { authRoutes } from '@chat-booth/auth/auth.routes';
+import { AuthGuard } from './guards';
 
-export const coreRoutes: Routes = [
+export const CORE_ROUTES: Routes = [
   { 
     path: '',
-    redirectTo: 'auth',
-    pathMatch: 'full'
+    redirectTo: 'home',
+    pathMatch: 'full',
   },
   { 
-    path: 'auth',
-    loadComponent: () => import('../auth/auth-root.component').then(auth => auth.AuthRootComponent),
-    children: [ ...authRoutes ]
+    path: '',
+    loadComponent: () => import('./core-root.component').then(core => core.CoreRootComponent),
+    children: [
+      { 
+        path: 'auth',
+        loadChildren: () => import('../auth/auth.routes').then(auth => auth.AUTH_ROUTES),
+      },
+      { 
+        path: 'home',
+        loadChildren: () => import('../home/home.routes').then(home => home.HOME_ROUTES),
+        canActivateChild: [AuthGuard],
+      },
+    ]
   },
 ];
