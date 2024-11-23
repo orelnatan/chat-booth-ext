@@ -11,7 +11,7 @@ export class AuthService {
     private readonly apollo: Apollo
   ) {}
   
-  authenticateUserByIdToken(idToken: string): Observable<boolean> {
+  public authenticateUserByIdToken(idToken: string): Observable<boolean> {
     return this.apollo.mutate<{ login: AuthStatus }>({
       mutation: AUTHENTICATE_USER,
       variables: { idToken }

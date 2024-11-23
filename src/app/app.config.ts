@@ -2,8 +2,10 @@ import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 
-import { graphQLProvider } from 'graphql.provider';
 import { routes } from './app.routes';
+
+import { graphQLProvider } from 'graphql.provider';
+import { imageProvider } from 'image.provider';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -11,5 +13,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(),
     graphQLProvider,
+    imageProvider
   ]
 };

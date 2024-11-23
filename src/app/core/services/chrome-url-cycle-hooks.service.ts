@@ -27,7 +27,7 @@ export class ChromeUrlCycleHooksService {
     });
   }
 
-  get url$(): BehaviorSubject<string> {
+  public get url$(): BehaviorSubject<string> {
     return this._url$;
   }
 }

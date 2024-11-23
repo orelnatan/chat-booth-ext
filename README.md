@@ -34,6 +34,18 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 Run `npm run build:chrome`
 
+## Git pull(update master to latest) => Mac Or Windows
+
+## Git pull on Mac: 
+Run `git pull --rebase origin master`
+
+## Git pull on Windows: 
+Run `git fetch origin` than `git reset --hard origin/master`
+
 ## Run webpack config
 
 Run `npx webpack --config webpack.config.js`
+
+## Manually remove local-storage user credentials
+
+In "service worker"(background.js) dev-tools console, Run: `chrome.storage.local.remove(['uid', 'idToken'])` 

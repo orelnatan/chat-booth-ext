@@ -1,0 +1,22 @@
+
+.app-navbar-main {
+  width: 100%;
+  padding: 10px;
+  background: var(--color-app-navbar-background);
+
+  .navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  img {
+    width: 35px;
+    border-radius: 50%;
+  }
+
+  span {
+    font-family: assistant-bold;
+  }
+}

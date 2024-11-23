@@ -3,6 +3,8 @@ import { RouterModule } from '@angular/router';
 
 import { LayoutModule } from '@chat-booth/shared/layout';
 
+import { BoothsService } from './services';
+
 @Component({
   selector: 'home-root',
   standalone: true,
@@ -15,5 +17,8 @@ import { LayoutModule } from '@chat-booth/shared/layout';
       <router-outlet />
     </root-layout>
   `,
+  providers: [
+    BoothsService
+  ]
 })
 export class HomeRootComponent {}

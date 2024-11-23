@@ -26,20 +26,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 // Listen to external signals - GLaDOS authorized only.
-chrome.runtime.onMessage.addListener(async(message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if(message.source !== SOURCE_ORIGIN) return;
 
   if(message.type === "ACCESS_GRANTED") {
-    await chrome.storage.local.set({ ...message.payload });
+    chrome.tabs.remove(activeLoginTabId).then(
+      async() => {
+        await chrome.storage.local.set({ ...message.payload });
 
-    chrome.runtime.sendMessage({ type: "LOGIN_SUCCESS", payload: { ...message.payload }});
+        chrome.runtime.sendMessage({ type: "LOGIN_SUCCESS", payload: { ...message.payload }});
+    })
   }
 
   if(message.type === "ACCESS_DENIED") {
+    chrome.tabs.remove(activeLoginTabId);
+
     chrome.runtime.sendMessage({ type: "LOGIN_FAILED", payload: { ...message.payload }});
   }
-  
-  chrome.tabs.remove(activeLoginTabId);
 });
-
-

@@ -1,0 +1,12 @@
+
+@let user = user$ | async;
+
+@if(user) {  
+  <div class="app-navbar-main shallow-shadow">
+    <div class="navbar-content">
+      <span>{{ user.name }}</span>
+
+      <img [src]="user.picture" />
+    </div>
+  </div>
+}

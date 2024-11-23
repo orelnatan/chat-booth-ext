@@ -6,6 +6,8 @@ import { ApolloError } from 'apollo-server-errors';
 import { ChromeLocalStorageService, UserStateService } from '@chat-booth/core/services';
 import { AuthCredentials } from '@chat-booth/auth/models';
 
+import { User } from '../models';
+
 const REDIRECT_TO_LOGIN: string = "/auth";
 
 @Injectable({
@@ -24,7 +26,9 @@ export class AuthGuard implements CanActivateChild {
         if(!credentials.idToken) return of(this.router.createUrlTree([ REDIRECT_TO_LOGIN ]));
 
         return this.userStateService.fetchUserByCredentials(credentials).pipe(
-          map((): boolean => {
+          map((user: User): boolean => {
+            this.userStateService.user = user;
+
             return true;
           }),
           catchError((error: ApolloError): Observable<UrlTree> => {

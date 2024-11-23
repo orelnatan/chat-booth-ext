@@ -1,6 +1,6 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
-import { UserStateService } from "@chat-booth/core/services";
+import { BoothsService } from "@chat-booth/home/services";
 import { LayoutModule } from "@chat-booth/shared/layout";
 
 @Component({
@@ -12,12 +12,13 @@ import { LayoutModule } from "@chat-booth/shared/layout";
   templateUrl: './board-page.component.html',
   styleUrl: './board-page.component.scss'
 })
-export class BoardPageComponent {
+export class BoardPageComponent implements OnInit {
 
   constructor(
-    private readonly userStateService: UserStateService,
-  ) {
-    console.log(this.userStateService.user$.getValue())
+    private readonly boothsService: BoothsService,
+  ) {}
+  
+  ngOnInit(): void {
+    
   }
-
 }

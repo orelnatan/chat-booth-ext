@@ -1,11 +1,9 @@
 
 <page-layout>
   <div class="login-page-main">
-    <span>{{ inProgress() }}</span>
+    <span>{{ inProgress() ? 'Laoding...' : null }}</span>
     <form>
       <button type="button" [disabled]="inProgress()" (click)="loginWithGoogle()">Connect with Google</button>
-      <br />
-      <button type="button">Logout from Google</button>
     </form>
   </div>
 </page-layout>
