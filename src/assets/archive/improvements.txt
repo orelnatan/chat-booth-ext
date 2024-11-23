@@ -1,10 +1,10 @@
 
-- Switch to Firebase login with redirect
+- Switch to Firebase login with redirect - optional
 
 - Make sure Glados will save the response in the local storage so the extension has access to it - V
 
 - Open the extension only in a specific tab
 
-- Verify that the login screen is not opened more than once
+- Verify that the login screen is not opened more than once - V
 
 - Use JS interface for chrome message types

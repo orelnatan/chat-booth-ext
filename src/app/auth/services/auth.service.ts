@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Apollo, MutationResult } from "apollo-angular";
 import { Observable, map } from "rxjs";
 
-import { AUTHENTICATE_USER } from "./gql-actions.gql";
+import { AUTHENTICATE } from "./gql-actions.gql";
 import { AuthStatus } from "../models";
 
 @Injectable()
@@ -12,12 +12,15 @@ export class AuthService {
   ) {}
   
   public authenticateUserByIdToken(idToken: string): Observable<boolean> {
-    return this.apollo.mutate<{ login: AuthStatus }>({
-      mutation: AUTHENTICATE_USER,
+    return this.apollo.mutate<{ authenticate: AuthStatus }>({
+      mutation: AUTHENTICATE,
       variables: { idToken }
     }).pipe(
-      map((response: MutationResult<{ login: AuthStatus }>): boolean => {
-        return response.data?.login.authorized;
+      map((response: MutationResult<{ authenticate: AuthStatus }>): boolean => {
+        if(!response.data.authenticate.authorized) throw new Error(
+          'Apollo GraphQL error occurred, at AUTHENTICATE ❌');
+
+        return response.data.authenticate.authorized;
       })
     );
   }

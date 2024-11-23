@@ -1,6 +1,6 @@
 import { ApplicationConfig, inject } from '@angular/core';
 import { setContext } from '@apollo/client/link/context';
-import { ApolloClientOptions, InMemoryCache, ApolloLink } from '@apollo/client/core';
+import { InMemoryCache, ApolloLink } from '@apollo/client/core';
 import { Apollo, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { lastValueFrom } from 'rxjs';
@@ -9,14 +9,19 @@ import { environment } from '@chat-booth/env/environment';
 import { ChromeLocalStorageService } from '@chat-booth/core/services';
 import { AuthCredentials } from '@chat-booth/auth/models';
 
-export function apolloOptionsFactory(): ApolloClientOptions<unknown> {
-  const httpLink: HttpLink = inject(HttpLink);
-  const chromeLocalStorageService: ChromeLocalStorageService = inject(ChromeLocalStorageService);
+interface ApolloOptionsFactoryConfig {
+  link: ApolloLink,
+  cache: InMemoryCache
+}
 
+export function apolloOptionsFactory(): ApolloOptionsFactoryConfig {
+  const chromeLocalStorageService: ChromeLocalStorageService = inject(ChromeLocalStorageService);
+  const httpLink: HttpLink = inject(HttpLink);
+ 
   let credentials: AuthCredentials;
 
   // Middleware to relove the auth credentials
-  const credentialsMiddleware: ApolloLink = setContext(async () => {
+  const credentialsMiddleware: ApolloLink = setContext(async() => {
     credentials = await lastValueFrom(
       chromeLocalStorageService.get<AuthCredentials>(['uid', 'idToken'])
     );
@@ -33,10 +38,10 @@ export function apolloOptionsFactory(): ApolloClientOptions<unknown> {
   });
 
    // Middleware to attach the uid variable
-  const udiMiddleware: ApolloLink = new ApolloLink((operation, forward) => {    
+  const uidMiddleware: ApolloLink = new ApolloLink((operation, forward) => {    
     operation.variables = {
       ...operation.variables,
-      id: credentials.uid || null,
+      userId: credentials.uid || null,
     };
 
     return forward(operation);
@@ -46,7 +51,7 @@ export function apolloOptionsFactory(): ApolloClientOptions<unknown> {
   const link: ApolloLink = ApolloLink.from([
     credentialsMiddleware,
     idTokenMiddleware,
-    udiMiddleware, 
+    uidMiddleware, 
     httpLink.create({ uri: environment.baseUrl }), 
   ]);
 

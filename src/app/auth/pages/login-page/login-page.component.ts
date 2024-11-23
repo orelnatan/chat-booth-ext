@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FirebaseError } from 'firebase/app';
 import { ApolloError } from 'apollo-server-errors';
 
+import { ChromeLocalStorageService } from '@chat-booth/core/services';
 import { ChromeMessage, MessageType } from '@chat-booth/core/models';
 import { LayoutModule } from '@chat-booth/shared/layout';
 import { AuthService } from '@chat-booth/auth/services';
@@ -36,6 +37,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   };
 
   constructor(
+    private readonly chromeLocalStorageService: ChromeLocalStorageService,
     private readonly authService: AuthService,
     private readonly router: Router
   ) {}
@@ -59,23 +61,26 @@ export class LoginPageComponent implements OnInit, OnDestroy {
 
     this.authService.authenticateUserByIdToken(credentials.idToken).subscribe({
       next: (): void => {
+        this.inProgress.set(false);
+
         this.router.navigate(['/home']);
       },
       error: (error: ApolloError): void => {
-        this.loginFailed(error);
+        this.chromeLocalStorageService.remove(['uid', 'idToken']);
+        this.inProgress.set(false);
+
+        console.error(error);
       }
     } 
   )}
 
-  loginFailed(error: FirebaseError | ApolloError): void {
+  loginFailed(error: FirebaseError): void {
+    console.error(error);
+
     this.inProgress.set(false);
   }
 
   loginSessionClosed(): void {
     this.inProgress.set(false);
-  }
-
-  goHome() {
-    this.router.navigate(['/home']);
   }
 }

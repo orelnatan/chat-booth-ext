@@ -1,8 +1,8 @@
 import { gql } from "apollo-angular";
 
-export const GET_USER = gql`
-  query getUser($id: String!) {
-    getUser(id: $id) {
+export const USER = gql`
+  query user($userId: String!) {
+    user(userId: $userId) {
       name
       email
       picture

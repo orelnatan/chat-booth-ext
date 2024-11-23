@@ -1,11 +1,9 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, map, of } from "rxjs";
+import { BehaviorSubject, Observable, map } from "rxjs";
 import { Apollo, MutationResult } from "apollo-angular";
 
-import { AuthCredentials } from "@chat-booth/auth/models";
-
 import { User } from "../models";
-import { GET_USER } from "./gql-actions.gql";
+import { USER } from "./gql-actions.gql";
 
 import * as FETCH_USER_BY_CREDENTIALS from 'src/assets/mocks/fetch-user-by-credentials.mock.json'; 
 
@@ -19,12 +17,15 @@ export class UserStateService {
     private readonly apollo: Apollo
   ) {}
 
-  public fetchUserByCredentials(credentials: AuthCredentials): Observable<User> {
-    return this.apollo.query<{ getUser: User }>({
-      query: GET_USER,
+  public fetchCurrentActiveUser(): Observable<User> {
+    return this.apollo.query<{ user: User }>({
+      query: USER,
     }).pipe(
-      map((response: MutationResult<{ getUser: User }>) => {
-        return response.data.getUser;
+      map((response: MutationResult<{ user: User }>) => {
+        if(!response.data.user) throw new Error(
+          'Apollo GraphQL error occurred, at USER ❌');
+
+        return response.data.user;
       })
     )
   }

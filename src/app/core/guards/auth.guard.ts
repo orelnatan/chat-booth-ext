@@ -25,13 +25,15 @@ export class AuthGuard implements CanActivateChild {
       switchMap((credentials: AuthCredentials): Observable<UrlTree | boolean> => {
         if(!credentials.idToken) return of(this.router.createUrlTree([ REDIRECT_TO_LOGIN ]));
 
-        return this.userStateService.fetchUserByCredentials(credentials).pipe(
+        return this.userStateService.fetchCurrentActiveUser().pipe(
           map((user: User): boolean => {
             this.userStateService.user = user;
 
             return true;
           }),
           catchError((error: ApolloError): Observable<UrlTree> => {
+            console.error(error);
+            
             return of(this.router.createUrlTree([ REDIRECT_TO_LOGIN ]));
           })
         )

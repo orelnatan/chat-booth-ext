@@ -1,8 +1,8 @@
 import { gql } from "apollo-angular";
 
-export const AUTHENTICATE_USER = gql`
-  mutation login($idToken: String!) {
-    login(idToken: $idToken) {
+export const AUTHENTICATE = gql`
+  mutation authenticate($idToken: String!) {
+    authenticate(idToken: $idToken) {
       authorized
     }
   }

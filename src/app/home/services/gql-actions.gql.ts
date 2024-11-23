@@ -1,8 +1,8 @@
 import { gql } from "apollo-angular";
 
-export const GET_USER_BOOTHS = gql`
-  query getUserBooths($id: String!) {
-    getUserBooths(id: $id) {
+export const USER_BOOTHS = gql`
+  query userBooths($userId: String!) {
+    userBooths(userId: $userId) {
       boothId
       joinedAt
     }
@@ -17,3 +17,8 @@ export const JOIN_BOOTH = gql`
   }
 `;
 
+export const LEAVE_BOOTH = gql`
+  mutation leaveBooth($boothId: String!, $userId: String!) {
+    leaveBooth(boothId: $boothId, userId: $userId)
+  }
+`;

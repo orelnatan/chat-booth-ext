@@ -1,0 +1,57 @@
+import { Component, OnInit } from "@angular/core";
+
+import { BoothsService } from "@chat-booth/home/services";
+import { LayoutModule } from "@chat-booth/shared/layout";
+
+@Component({
+  selector: 'board-page',
+  standalone: true,
+  imports: [
+    LayoutModule,
+  ],
+  templateUrl: './board-page.component.html',
+  styleUrl: './board-page.component.scss'
+})
+export class BoardPageComponent implements OnInit {
+
+  constructor(
+    private readonly boothsService: BoothsService,
+  ) {}
+  
+  ngOnInit(): void {
+    
+  }
+
+  getUserBooths() {
+    this.boothsService.getUserBooths().subscribe((data) => {
+      console.log("getUserBooths ", data)
+    })
+  }
+
+  joinBooth() {
+    this.boothsService.joinBooth("").subscribe((data) => {
+      console.log("joinBooth ", data)
+    })
+  }
+
+  leaveBooth() {
+    this.boothsService.leaveBooth("").subscribe((data) => {
+      console.log("leaveBooth ", data)
+    })
+  }
+}
+
+
+
+<br />
+<button (click)="getUserBooths()">getUserBooths</button>
+<br />
+<button (click)="joinBooth()">joinBooth</button>
+<br />
+<button (click)="leaveBooth()">leaveBooth</button>
+
+button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+}

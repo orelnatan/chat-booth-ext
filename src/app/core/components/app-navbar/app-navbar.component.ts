@@ -16,6 +16,4 @@ import { User } from "@chat-booth/core/models";
 })
 export class AppNavbarComponent {
   user$: BehaviorSubject<User> = inject(UserStateService).user$;
-
-
 }
