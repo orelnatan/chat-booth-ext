@@ -4,6 +4,10 @@
     <span>{{ inProgress() ? 'Laoding...' : null }}</span>
     <form>
       <button type="button" [disabled]="inProgress()" (click)="loginWithGoogle()">Connect with Google</button>
+
+      <br />
+
+      <button type="button" (click)="goHome()">Go Home</button>
     </form>
   </div>
 </page-layout>

@@ -74,4 +74,8 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   loginSessionClosed(): void {
     this.inProgress.set(false);
   }
+
+  goHome() {
+    this.router.navigate(['/home']);
+  }
 }

@@ -22,14 +22,6 @@ export class UserStateService {
   public fetchUserByCredentials(credentials: AuthCredentials): Observable<User> {
     return this.apollo.query<{ getUser: User }>({
       query: GET_USER,
-      context: {
-        headers: {
-          Authorization: `Bearer ${credentials.idToken}`
-        }
-      },
-      variables: {
-        id: credentials.uid
-      },
     }).pipe(
       map((response: MutationResult<{ getUser: User }>) => {
         return response.data.getUser;
