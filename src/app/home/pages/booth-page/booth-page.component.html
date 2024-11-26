@@ -1,0 +1,22 @@
+
+@let booth = booth$ | async;
+@let messages = messages$ | async;
+
+<root-layout>
+  <layout-header header-primary>
+    <booth-header [id]="booth?.id" [joinedAt]="booth?.joinedAt"></booth-header>
+  </layout-header>
+
+  <page-layout>
+    <div class="booth-page-main">
+      @for (message of messages; track $index) {
+        <div class="booth-message shallow-shadow">
+          <p>this is a message...</p></div>
+      }
+    </div>
+  </page-layout>
+
+  <layout-footer footer-primary>
+    <booth-footer></booth-footer>
+  </layout-footer>
+</root-layout>

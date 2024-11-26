@@ -1,0 +1,15 @@
+
+.booth-header-main {
+  width: 100%;
+  padding: 10px;
+  border-top: 1px solid var(--color-booth-header-border);
+  background: var(--color-booth-header-bg);
+
+  h2, h3 {
+    font-family: assistant-bold;
+  }
+
+  h3 {
+    padding-top: 10px;
+  }
+}

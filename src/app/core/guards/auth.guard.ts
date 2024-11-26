@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivateChild {
         return this.userStateService.fetchCurrentActiveUser().pipe(
           map((user: User): boolean => {
             this.userStateService.user = user;
-
+          
             return true;
           }),
           catchError((error: ApolloError): Observable<UrlTree> => {

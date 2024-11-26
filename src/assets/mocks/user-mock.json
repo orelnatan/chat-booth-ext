@@ -1,0 +1,9 @@
+
+{
+  "__typename": "User",
+  "name": "Orel Naten",
+  "email": "natenorel@gmail.com",
+  "picture": "https://lh3.googleusercontent.com/a/ACg8ocKtFnZvUIzwLdBI4stG0q8hzKxzTiwT7sfvwSCIrIYnuISE2Ss=s96-c",
+  "phone": null,
+  "createdAt": "063867900593.537000000"
+}

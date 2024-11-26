@@ -14,6 +14,10 @@ export const HOME_ROUTES: Routes = [
         path: 'board',
         loadChildren: () => import('./pages/board-page').then(board => board.BOARD_PAGE_ROUTES),
       },
+      { 
+        path: 'booth/:boothId',
+        loadChildren: () => import('./pages/booth-page').then(booth => booth.BOOTH_PAGE_ROUTES),
+      },
     ]
   },
 ];

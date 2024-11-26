@@ -1,5 +1,15 @@
+
+@let booths = booths$ | async;
+
 <page-layout>
   <div class="board-page-main">
-    This is Board page!
+    <h2>MY BOOTHS</h2>
+    <ul>
+      @for (booth of booths; track $index) {
+        <li>
+          <a [routerLink]="['../booth', booth.id]">{{ booth.id }}</a>
+        </li>
+      }
+    </ul>
   </div>
 </page-layout>
