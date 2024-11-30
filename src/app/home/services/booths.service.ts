@@ -5,8 +5,6 @@ import { Observable, map, of } from "rxjs";
 import { GET_BOOTHS, JOIN_BOOTH, LEAVE_BOOTH, GET_MESSAGES, SEND_MESSAGE } from "./gql-actions.gql";
 import { Booth, ChatMessage } from "../models";
 
-import * as GET_BOOTHS_MOCK from 'src/assets/mocks/user-booths-mock.json'; 
-
 const LIMIT: number = 3;
 const CURSOR: number = 3;
 

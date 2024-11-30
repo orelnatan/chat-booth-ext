@@ -5,8 +5,6 @@ import { Apollo, MutationResult } from "apollo-angular";
 import { User } from "../models";
 import { USER } from "./gql-actions.gql";
 
-import * as USER_MOCK from 'src/assets/mocks/user-mock.json'; 
-
 @Injectable({
   providedIn: 'root'
 })

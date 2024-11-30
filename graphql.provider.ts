@@ -37,7 +37,7 @@ export function apolloOptionsFactory(): ApolloOptionsFactoryConfig {
     };
   });
 
-   // Middleware to attach the uid variable
+  // Middleware to attach the uid variable
   const uidMiddleware: ApolloLink = new ApolloLink((operation, forward) => {    
     operation.variables = {
       ...operation.variables,
