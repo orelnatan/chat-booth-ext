@@ -1,0 +1,77 @@
+
+Subscribe to a streem from a Firebse remote node(by GPT)
+
+// Subscribe to notifications
+ public getNotifications(): Observable<Notification[]> {
+   return this.firestore
+     .collection<Notification>('booths', (ref) =>
+       ref.orderBy('timestamp', 'desc')
+     )
+     .snapshotChanges()
+     .pipe(
+       map((changes) =>
+         changes.map((change) => {
+           const data = change.payload.doc.data() as Notification;
+           const id = change.payload.doc.id;
+           return { id, ...data };
+         })
+       )
+     );
+ }
+
+Subscribe to a streem from a Firebse remote node(by signInWithCustomToken) - worked!!
+
+import { AngularFirestore } from "@angular/fire/compat/firestore";
+import { GoogleAuthProvider, getAuth, signInWithCredential, signInWithCustomToken } from "@angular/fire/auth";
+import { FirebaseModule } from "@chat-booth/shared/firebase";
+
+ctoken = authenticateUserByIdToken(idToken: string - the idToken from GLaDOS)
+
+this.messages$.subscribe(
+  (messagesx: ChatMessage[]) => {
+    const auth = getAuth();
+
+  signInWithCustomToken(auth, ctoken) // get the GUser object, and get authorized to access Firebase remote node
+  .then((userCredential) => {
+    console.log('User authenticated:', userCredential.user);
+
+    const messages = this.firestore
+    .collection("booths")
+    .doc(this.boothId)
+    .collection("boothMessages")
+    // .ref.orderBy("createdAt", "desc")
+    // .where("createdAt", ">", messagesx[0].createdAt);
+  
+    messages.ref.onSnapshot((snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+      if (change.type === 'added') {
+        
+        console.log("✅ NEW MESSAGE ADDED TO COLLECTION")
+    
+        const message = {
+        id: change.doc.id,
+        ...change.doc.data(),
+        };
+  
+        console.log(message);
+      }
+      });
+    })
+  })
+})
+
+using firebaseCollectionService:
+
+ngOnInit(): void {
+  const collectionRef = this.firebaseCollectionService
+  .getSubCollectionReference("sa", "DAS", "asdsad")
+  .orderBy("createdAt", "desc")
+  .where("createdAt", ">", "dsa");
+
+  this.firebaseCollectionService.observeRemoteCollectionStream(collectionRef)
+  .subscribe((change: DocumentChange<DocumentData>) => {
+    if(change.type === FireDocumentChangeType.Added) {
+      change.doc.data
+    }
+  })
+}

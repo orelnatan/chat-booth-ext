@@ -3,7 +3,7 @@ import { Apollo, MutationResult } from "apollo-angular";
 import { Observable, map } from "rxjs";
 
 import { AUTHENTICATE } from "./gql-actions.gql";
-import { AuthStatus } from "../models";
+import { AuthData } from "../models";
 
 @Injectable()
 export class AuthService {
@@ -11,16 +11,16 @@ export class AuthService {
     private readonly apollo: Apollo
   ) {}
   
-  public authenticateUserByIdToken(idToken: string): Observable<boolean> {
-    return this.apollo.mutate<{ authenticate: AuthStatus }>({
+  public authenticateUserByIdToken(idToken: string): Observable<string> {
+    return this.apollo.mutate<{ authenticate: AuthData }>({
       mutation: AUTHENTICATE,
       variables: { idToken }
     }).pipe(
-      map((response: MutationResult<{ authenticate: AuthStatus }>): boolean => {
-        if(!response.data.authenticate.authorized) throw new Error(
+      map((response: MutationResult<{ authenticate: AuthData }>): string => {
+        if(!response.data.authenticate.customToken) throw new Error(
           'Apollo GraphQL error occurred, at AUTHENTICATE ❌');
 
-        return response.data.authenticate.authorized;
+        return response.data.authenticate.customToken;
       })
     );
   }

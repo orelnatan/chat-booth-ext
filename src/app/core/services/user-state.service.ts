@@ -18,7 +18,6 @@ export class UserStateService {
   public fetchCurrentActiveUser(): Observable<User> {
     return this.apollo.query<{ user: User }>({
       query: USER,
-      fetchPolicy: 'no-cache'
     }).pipe(
       map((response: MutationResult<{ user: User }>) => {
         if(!response.data.user) throw new Error(

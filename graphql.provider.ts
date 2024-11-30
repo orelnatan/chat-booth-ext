@@ -32,7 +32,7 @@ export function apolloOptionsFactory(): ApolloOptionsFactoryConfig {
     return {
       headers: {
         ...headers,
-        Authorization: credentials?.idToken ? `Bearer ${credentials.idToken}` : null,
+        Authorization: credentials?.idToken ? `Bearer ${credentials.idToken}` : '',
       }
     };
   });

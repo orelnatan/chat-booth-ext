@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit, WritableSignal, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, WritableSignal, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseError } from 'firebase/app';
 import { ApolloError } from 'apollo-server-errors';
 
 import { ChromeLocalStorageService } from '@chat-booth/core/services';
 import { ChromeMessage, MessageType } from '@chat-booth/core/models';
+import { FirebaseAuthService, FirebaseModule } from '@chat-booth/shared/firebase';
 import { LayoutModule } from '@chat-booth/shared/layout';
 import { AuthService } from '@chat-booth/auth/services';
 import { AuthCredentials } from '@chat-booth/auth/models';
@@ -14,12 +15,18 @@ import { AuthCredentials } from '@chat-booth/auth/models';
   standalone: true,
   imports: [
     LayoutModule,
+    FirebaseModule
   ],
   providers: [AuthService],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
 })
 export class LoginPageComponent implements OnInit, OnDestroy {
+  chromeLocalStorageService: ChromeLocalStorageService = inject(ChromeLocalStorageService);
+  firebaseAuthService: FirebaseAuthService = inject(FirebaseAuthService);
+  authService: AuthService = inject(AuthService);
+  router: Router = inject(Router);
+
   inProgress: WritableSignal<boolean> = signal(false);
 
   chromeRuntimeListener = (message: ChromeMessage): void => {
@@ -36,12 +43,6 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     }
   };
 
-  constructor(
-    private readonly chromeLocalStorageService: ChromeLocalStorageService,
-    private readonly authService: AuthService,
-    private readonly router: Router
-  ) {}
-
   ngOnInit(): void {
     chrome.runtime.onMessage.addListener(this.chromeRuntimeListener);
   }
@@ -57,27 +58,27 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   }
 
   loginSuccess(credentials: AuthCredentials): void {
-    this.inProgress.set(true);
-
     this.authService.authenticateUserByIdToken(credentials.idToken).subscribe({
-      next: (): void => {
-        this.inProgress.set(false);
+      next: async(customToken: string) => {
+        const uid: string = credentials.uid;
+        const idToken: string = await (await this.firebaseAuthService
+          .signInWithCustomToken(customToken))
+          .user
+          .getIdToken();
 
+        this.chromeLocalStorageService.set<AuthCredentials>({ idToken, uid });
         this.router.navigate(['/home']);
       },
       error: (error: ApolloError): void => {
-        this.chromeLocalStorageService.remove(['uid', 'idToken']);
         this.inProgress.set(false);
 
-        console.error(error);
+        this.loginFailed(error);
       }
     } 
   )}
 
-  loginFailed(error: FirebaseError): void {
+  loginFailed(error: FirebaseError | ApolloError): void {
     console.error(error);
-
-    this.inProgress.set(false);
   }
 
   loginSessionClosed(): void {

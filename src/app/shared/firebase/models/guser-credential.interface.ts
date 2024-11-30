@@ -1,3 +1,3 @@
-import firebase from "firebase/compat/app";
+import { UserCredential } from "firebase/auth";
 
-export interface GUserCredential extends firebase.auth.UserCredential {}
+export interface GUserCredential extends UserCredential {}

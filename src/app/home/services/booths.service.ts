@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo, MutationResult } from "apollo-angular";
-import { Observable, map, of } from "rxjs";
+import { Observable, map } from "rxjs";
 
 import { GET_BOOTHS, JOIN_BOOTH, LEAVE_BOOTH, GET_MESSAGES, SEND_MESSAGE } from "./gql-actions.gql";
 import { Booth, ChatMessage } from "../models";

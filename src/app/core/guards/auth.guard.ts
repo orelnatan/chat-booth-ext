@@ -37,7 +37,7 @@ export class AuthGuard implements CanActivateChild {
             return of(this.router.createUrlTree([ REDIRECT_TO_LOGIN ]));
           })
         )
-      }),
+      })
     )
   }
 }

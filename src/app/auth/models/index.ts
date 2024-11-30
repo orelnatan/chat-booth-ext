@@ -1,3 +1,3 @@
 
 export { AuthCredentials } from './auth-credentials.interface';
-export { AuthStatus } from './auth-status.interface';
+export { AuthData } from './auth-data.interface';

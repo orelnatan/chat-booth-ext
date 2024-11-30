@@ -1,5 +1,5 @@
 
 export interface AuthCredentials {
   idToken: string;
-  uid: string
+  uid: string;
 }
