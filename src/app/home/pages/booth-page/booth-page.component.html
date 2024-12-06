@@ -1,6 +1,5 @@
 
 @let booth = booth$ | async;
-@let messages = messages$ | async;
 
 <root-layout>
   <layout-header header-primary>
@@ -9,14 +8,20 @@
 
   <page-layout>
     <div class="booth-page-main">
-      @for (message of messages; track $index) {
-        <div class="booth-message shallow-shadow">
-          <p>this is a message...</p></div>
+      @if(messages) {
+        @for (message of messages; track $index) {
+          <div class="booth-message shallow-shadow">
+            <p>{{ message.content }}</p></div>
+        }
+      } @else {
+        Loading Messages ...
       }
     </div>
   </page-layout>
 
   <layout-footer footer-primary>
-    <booth-footer></booth-footer>
+    <booth-footer
+      [pending]="sending"
+      (onMessage)="handleMessage($event)"></booth-footer>
   </layout-footer>
 </root-layout>

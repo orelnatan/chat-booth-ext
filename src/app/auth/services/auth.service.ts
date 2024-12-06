@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { Apollo, MutationResult } from "apollo-angular";
 import { Observable, map } from "rxjs";
 
@@ -7,9 +7,7 @@ import { AuthData } from "../models";
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly apollo: Apollo
-  ) {}
+  apollo: Apollo = inject(Apollo);
   
   public authenticateUserByIdToken(idToken: string): Observable<string> {
     return this.apollo.mutate<{ authenticate: AuthData }>({

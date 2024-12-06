@@ -1,8 +1,8 @@
 import { gql } from "apollo-angular";
 
 export const GET_BOOTHS = gql`
-  query userBooths($userId: String!) {
-    userBooths(userId: $userId) {
+  query userBooths($userId: String!, $limit: Int!, $cursor: String) {
+    userBooths(userId: $userId, limit: $limit, cursor: $cursor) {
       id
       joinedAt
     }
@@ -24,25 +24,29 @@ export const LEAVE_BOOTH = gql`
 `;
 
 export const GET_MESSAGES =  gql`
-  query messages($boothId: String!, $limit: Int!) {
-    messages(boothId: $boothId, limit: $limit) {
+  query messages($boothId: String!, $limit: Int!, $cursor: String, $parentMessageId: String) {
+    messages(boothId: $boothId, limit: $limit, cursor: $cursor, parentMessageId: $parentMessageId) {
       id
       senderId
       boothId
       content
       createdAt
+      parentMessageId
+      replyCount
     }
   }
 `;
 
 export const SEND_MESSAGE =  gql`
-  mutation sendMessage($boothId: String!, $userId: String!, $content: String!) {
-    sendMessage(boothId: $boothId, userId: $userId, content: $content) {
+  mutation sendMessage($boothId: String!, $userId: String!, $content: String!, $parentMessageId: String) {
+    sendMessage(boothId: $boothId, userId: $userId, content: $content, parentMessageId: $parentMessageId) {
       id
       senderId
       boothId
       content
       createdAt
+      parentMessageId
+      replyCount
     }
   }
 `;

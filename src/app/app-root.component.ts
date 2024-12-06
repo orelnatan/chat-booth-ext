@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { LayoutModule } from './shared/layout';
 import { RouterModule } from '@angular/router';
@@ -16,4 +16,8 @@ import { RouterModule } from '@angular/router';
     </root-layout>
   `
 })
-export class AppRootComponent {}
+export class AppRootComponent implements OnInit {
+  ngOnInit(): void {
+    chrome.runtime.connect();
+  }
+}

@@ -1,11 +1,23 @@
-import './context-menus-handler.js';
-import './side-panel-handler.js';
-import './url-hooks-handler.js';
+import './url-cycle-hooks.js';
+import './side-panel.js';
+import './context-menus.js';
 
 let activeLoginTabId;
 
 const SOURCE_ORIGIN = "GLaDOS";
 const GOOGLE_LOGIN_URL = "http://localhost:4200/auth/login-with-google";
+
+// Listen to Chrome lifecycle hooks.
+chrome.runtime.onConnect.addListener((chromeRuntimePort) => {
+  // ChromeOnConnect - will fire only once, when the Angular app was initialized.
+  chromeRuntimePort.onDisconnect.addListener(() => {
+    // ChromeOnDisconnect - will fire only once, when the Angular app was disposed.
+
+    if(activeLoginTabId) {
+      chrome.tabs.remove(activeLoginTabId);
+    }
+  });
+});
 
 // Listen to registered external tabs close events.
 chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
@@ -39,3 +51,4 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   chrome.tabs.remove(activeLoginTabId);
 });
+

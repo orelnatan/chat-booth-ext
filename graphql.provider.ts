@@ -6,7 +6,7 @@ import { HttpLink } from 'apollo-angular/http';
 import { lastValueFrom } from 'rxjs';
 
 import { environment } from '@chat-booth/env/environment';
-import { ChromeLocalStorageService } from '@chat-booth/core/services';
+import { ChromeLocalStorageService as StorageService } from '@chat-booth/core/services';
 import { AuthCredentials } from '@chat-booth/auth/models';
 
 interface ApolloOptionsFactoryConfig {
@@ -15,7 +15,7 @@ interface ApolloOptionsFactoryConfig {
 }
 
 export function apolloOptionsFactory(): ApolloOptionsFactoryConfig {
-  const chromeLocalStorageService: ChromeLocalStorageService = inject(ChromeLocalStorageService);
+  const storageService: StorageService = inject(StorageService);
   const httpLink: HttpLink = inject(HttpLink);
  
   let credentials: AuthCredentials;
@@ -23,7 +23,7 @@ export function apolloOptionsFactory(): ApolloOptionsFactoryConfig {
   // Middleware to relove the auth credentials
   const credentialsMiddleware: ApolloLink = setContext(async() => {
     credentials = await lastValueFrom(
-      chromeLocalStorageService.get<AuthCredentials>(['uid', 'idToken'])
+      storageService.get<AuthCredentials>(['uid', 'idToken'])
     );
   });
 

@@ -1,6 +1,9 @@
 
 <div class="booth-footer-main">
-  <textarea rows="3" #textarea></textarea>
+  <textarea rows="2" [(ngModel)]="value"></textarea>
 
-  <button (click)="onMessage.emit(textarea.value)">Send</button>
+  <button [disabled]="pending || !value?.trim()"
+   (click)="sendMessage()">
+    {{ pending ? 'Sending...' : 'Send' }}
+  </button>
 </div>

@@ -1,0 +1,10 @@
+
+export class RootLayoutComponent {
+  @ViewChild('layoutContent', { read: ElementRef }) layoutContent: ElementRef<HTMLDivElement>;
+
+  @Input({ transform: booleanAttribute }) forRoot: boolean;
+
+  public scrollToBottom(): void {
+    this.layoutContent.nativeElement.scrollTop = this.layoutContent.nativeElement.scrollHeight;
+  }
+}

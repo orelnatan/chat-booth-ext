@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { FirebaseError } from 'firebase/app';
 import { ApolloError } from 'apollo-server-errors';
 
-import { ChromeLocalStorageService } from '@chat-booth/core/services';
-import { ChromeMessage, MessageType } from '@chat-booth/core/models';
-import { FirebaseAuthService, FirebaseModule } from '@chat-booth/shared/firebase';
+import { ChromeLocalStorageService as StorageService } from '@chat-booth/core/services';
+import { ChromeMessage, ChromeMessageType } from '@chat-booth/core/models';
+import { FirebaseAuthService as FireAuthService, FirebaseModule } from '@chat-booth/shared/firebase';
 import { LayoutModule } from '@chat-booth/shared/layout';
 import { AuthService } from '@chat-booth/auth/services';
 import { AuthCredentials } from '@chat-booth/auth/models';
@@ -22,23 +22,23 @@ import { AuthCredentials } from '@chat-booth/auth/models';
   styleUrl: './login-page.component.scss'
 })
 export class LoginPageComponent implements OnInit, OnDestroy {
-  chromeLocalStorageService: ChromeLocalStorageService = inject(ChromeLocalStorageService);
-  firebaseAuthService: FirebaseAuthService = inject(FirebaseAuthService);
+  storageService: StorageService = inject(StorageService);
+  fireAuthService: FireAuthService = inject(FireAuthService);
   authService: AuthService = inject(AuthService);
   router: Router = inject(Router);
 
   inProgress: WritableSignal<boolean> = signal(false);
 
   chromeRuntimeListener = (message: ChromeMessage): void => {
-    if (message.type === MessageType.LoginSuccess) {
+    if (message.type === ChromeMessageType.LoginSuccess) {
       this.loginSuccess(<AuthCredentials>message.payload);
     }
 
-    if (message.type === MessageType.LoginFailed) {
+    if (message.type === ChromeMessageType.LoginFailed) {
       this.loginFailed(<FirebaseError>message.payload);
     }
 
-    if (message.type === MessageType.LoginSessionClosed) {
+    if (message.type === ChromeMessageType.LoginSessionClosed) {
       this.loginSessionClosed();
     }
   };
@@ -54,19 +54,19 @@ export class LoginPageComponent implements OnInit, OnDestroy {
   loginWithGoogle(): void {
     this.inProgress.set(true);
 
-    chrome.runtime.sendMessage({ type: MessageType.GoogleLoginInit } as ChromeMessage);
+    chrome.runtime.sendMessage({ type: ChromeMessageType.GoogleLoginInit } as ChromeMessage);
   }
 
   loginSuccess(credentials: AuthCredentials): void {
     this.authService.authenticateUserByIdToken(credentials.idToken).subscribe({
       next: async(customToken: string) => {
         const uid: string = credentials.uid;
-        const idToken: string = await (await this.firebaseAuthService
+        const idToken: string = await (await this.fireAuthService
           .signInWithCustomToken(customToken))
           .user
           .getIdToken();
 
-        this.chromeLocalStorageService.set<AuthCredentials>({ idToken, uid });
+        this.storageService.set<AuthCredentials>({ idToken, uid });
         this.router.navigate(['/home']);
       },
       error: (error: ApolloError): void => {

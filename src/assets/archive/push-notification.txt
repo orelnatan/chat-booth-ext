@@ -75,3 +75,37 @@ ngOnInit(): void {
     }
   })
 }
+
+
+// Adding, removing, and modify messages
+
+messagesChanges: BehaviorSubject<ChatMessage[]> = new BehaviorSubject<ChatMessage[]>([]);
+messagesChanges$: Observable<ChatMessage[]> = this.messagesChanges.asObservable();
+
+messages$: Observable<ChatMessage[]> = combineLatest([
+  this.boothsService.getMessages(this.boothId, 5),
+  this.messagesChanges$,
+]).pipe(
+  map(([initialMessages, updatedMessages]) => [...initialMessages, ...updatedMessages])
+);
+
+addNewMessage(message: ChatMessage): void {
+  const currentMessages = this.messagesChanges.value;
+  this.messagesChanges.next([...currentMessages, message]);
+}
+
+removeMessage(messageToRemove: ChatMessage): void {    
+  const currentMessages = this.messagesChanges.value;
+  const filteredMessages = currentMessages.filter(
+    (msg) => msg.id !== messageToRemove.id // Assume each message has a unique `id`
+  );
+  this.messagesChanges.next(filteredMessages);
+}
+
+modifyMessage(updatedMessage: ChatMessage): void {    
+  const currentMessages = this.messagesChanges.value;
+  const updatedMessages = currentMessages.map((msg) =>
+    msg.id === updatedMessage.id ? updatedMessage : msg
+  );
+  this.messagesChanges.next(updatedMessages);
+}

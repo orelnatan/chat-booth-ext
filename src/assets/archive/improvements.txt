@@ -8,3 +8,5 @@
 - Verify that the login screen is not opened more than once - V
 
 - Use JS interface for chrome message types
+
+- Remove "$" sign from RxJS Subject

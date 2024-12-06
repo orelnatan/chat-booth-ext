@@ -26,7 +26,7 @@ import { AppNavbarComponent } from './components';
   `,
 })
 export class CoreRootComponent {
-  constructor(
+  constructor( // Remove
     @Inject(DOCUMENT) private document: Document,
   ) {
     this.document.body.classList.add("hyperion");

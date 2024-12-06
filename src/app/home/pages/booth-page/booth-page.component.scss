@@ -1,9 +1,11 @@
 
 .booth-page-main {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
   height: 100%;
 
   .booth-message {
-    margin-top: 15px;
     padding: 10px;
     border-radius: 20px;
     background: var(--color-chat-message-bg);
