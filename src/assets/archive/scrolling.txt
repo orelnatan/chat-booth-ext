@@ -1,0 +1,37 @@
+
+export class RootLayoutComponent {
+  @ViewChild('layoutContent', { read: ElementRef }) layoutContent: ElementRef<HTMLDivElement>;
+
+  @Input({ transform: booleanAttribute }) forRoot: boolean;
+
+  public scrollToBottom(): void {
+    this.layoutContent.nativeElement.scrollTop = this.layoutContent.nativeElement.scrollHeight;
+  }
+}
+
+
+detect when scrolling to..
+
+onScroll(event: Event): void {
+  const target = event.target as HTMLElement;
+
+  // Detect scrolling to the top
+  if (target.scrollTop === 0) {
+    console.log('User scrolled to the top!');
+  }
+
+  // Detect scrolling to the bottom
+  if (target.scrollTop + target.clientHeight >= target.scrollHeight) {
+    console.log('User scrolled to the bottom!');
+  }
+
+  // Detect scrolling to the right edge
+  if (target.scrollLeft + target.clientWidth >= target.scrollWidth) {
+    console.log('User scrolled to the right edge!');
+  }
+
+  // Detect scrolling to the left edge
+  if (target.scrollLeft === 0) {
+    console.log('User scrolled to the left edge!');
+  }
+}

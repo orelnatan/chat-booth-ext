@@ -1,11 +1,29 @@
 
-<div class="page-layout-main" 
-  [style.height.%]="fitHeightByContent ? 0 : null"
-  [style.width.%]="fitWidthByContent ? 0 : null"
->  
-  <div class="page-layout-content"
-    [style.padding.px]="withoutPadding ? 0 : null"
+<!-- Page Layout - Supports scroll, header and footer -->
+<div class="page-layout-main">
+  <div class="layout-top">
+    <div class="layout-header-container">
+      <header>
+        <ng-content select="layout-header" select="[header-primary]"></ng-content>
+      </header>
+    </div>
+  </div>
+  
+  <div class="page-layout-body" #pageLayoutBody
+    (scroll)="onScroll($event)"
   >
-    <ng-content></ng-content>
+    <div class="page-layout-content-outer-wrapper">
+      <div class="page-layout-content">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout-bottom">
+    <div class="layout-footer-container">
+      <footer>
+        <ng-content select="layout-footer" select="[footer-primary]"></ng-content>
+      </footer>
+    </div>
   </div>
 </div>

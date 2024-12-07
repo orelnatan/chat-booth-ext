@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, OnInit, ViewChild, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute, RouterModule } from "@angular/router";
 import { DocumentChange, DocumentData, Query } from "@angular/fire/compat/firestore";
@@ -15,7 +15,7 @@ import {
   FirebaseTimestamp, 
   stringToFirebaseTimestamp 
 } from "@chat-booth/shared/firebase";
-import { LayoutModule } from "@chat-booth/shared/layout";
+import { LayoutModule, PageLayoutComponent } from "@chat-booth/shared/layout";
 import { BoothsService } from "@chat-booth/home/services";
 import { Booth, ChatMessage } from "@chat-booth/home/models";
 import { fireDocumentToChatMessage } from "@chat-booth/home/utils";
@@ -24,8 +24,10 @@ import { BoothFooterComponent, BoothHeaderComponent } from "./components";
 
 const PATH_PARAM: string = "boothId";
 const CREATED_AT: string = "createdAt";
+const PARENT_MESSAGE_ID: string = "parentMessageId";
 const DESCENDING: OrderByDirection = "desc"; 
 const GREATER_THAN: WhereFilterOp = ">"; 
+const EQUALS_TO: WhereFilterOp = "==";
 
 @UntilDestroy()
 @Component({
@@ -43,6 +45,8 @@ const GREATER_THAN: WhereFilterOp = ">";
   styleUrl: './booth-page.component.scss'
 })
 export class BoothPageComponent implements OnInit {
+  @ViewChild(PageLayoutComponent) pageLayoutComponent: PageLayoutComponent;
+
   collectionService: CollectionService = inject(CollectionService);
   boothsService: BoothsService = inject(BoothsService);
   activatedRoute: ActivatedRoute = inject(ActivatedRoute);
@@ -56,7 +60,7 @@ export class BoothPageComponent implements OnInit {
     this.boothsService.getMessages(this.boothId, 35)
     .subscribe((messages: ChatMessage[]) => {
         this.messages = messages;
-
+        
         this.observeBoothMessagesStream(
           stringToFirebaseTimestamp([...messages].pop()?.createdAt));
       }
@@ -79,6 +83,7 @@ export class BoothPageComponent implements OnInit {
     return this.collectionService
     .getSubCollectionReference(Collection.Booths, SubCollection.BoothMessages, this.boothId)
     .orderBy(CREATED_AT, DESCENDING)
+    .where(PARENT_MESSAGE_ID, EQUALS_TO, null)
     .where(CREATED_AT, GREATER_THAN, startAfterTimestamp || FirebaseTimestamp.now());
   }
 

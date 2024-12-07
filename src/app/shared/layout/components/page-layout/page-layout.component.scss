@@ -3,7 +3,15 @@
 .page-layout-main {
   @extend %page-layout-main;
 
+  .page-layout-body {
+    @extend %page-layout-body;
+  }
+
+  .page-layout-content-outer-wrapper {
+    @extend %page-layout-content-outer-wrapper;
+  }
+
   .page-layout-content {
-    @extend %page-layout-content;  
+    @extend %page-layout-content;
   }
 }

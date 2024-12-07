@@ -1,27 +1,32 @@
 
 @let booth = booth$ | async;
 
-<root-layout>
+<page-layout>
   <layout-header header-primary>
-    <booth-header [id]="booth?.id" [joinedAt]="booth?.joinedAt"></booth-header>
+    <booth-header 
+      [id]="booth?.id" 
+      [joinedAt]="booth?.joinedAt">
+    </booth-header>
   </layout-header>
 
-  <page-layout>
-    <div class="booth-page-main">
-      @if(messages) {
-        @for (message of messages; track $index) {
-          <div class="booth-message shallow-shadow">
-            <p>{{ message.content }}</p></div>
-        }
-      } @else {
-        Loading Messages ...
+  <div class="booth-page-main">
+    @if(messages) {
+      @for (message of messages; track $index) {
+        <div class="booth-message shallow-shadow">
+          <p>{{ message.content }}</p></div>
       }
-    </div>
-  </page-layout>
+    } @else {
+      Loading Messages ...
+    }
+  </div>
 
   <layout-footer footer-primary>
     <booth-footer
       [pending]="sending"
-      (onMessage)="handleMessage($event)"></booth-footer>
+      (onMessage)="handleMessage($event)">
+    </booth-footer>
   </layout-footer>
-</root-layout>
+</page-layout>
+
+  
+

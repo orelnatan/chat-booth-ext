@@ -1,6 +1,21 @@
 
 %page-layout-main {
-  display: table; 
+  display: flex;
+  flex-direction: column;
+  height: $full-screen-height;
+  width: $full-screen-width;
+}
+
+%page-layout-body {
+  display: flex;
+  flex-direction: row;
+  width: $full-screen-width;
+  height: $full-screen-height;
+  overflow: auto;
+}
+
+%page-layout-content-outer-wrapper {
+  display: table;
   width: $full-screen-width;
   height: $full-screen-height;
 }
