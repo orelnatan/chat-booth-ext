@@ -9,11 +9,11 @@
     </div>
   </div>
   
-  <div class="page-layout-body" #pageLayoutBody
-    (scroll)="onScroll($event)"
-  >
-    <div class="page-layout-content-outer-wrapper">
-      <div class="page-layout-content">
+  <div class="page-layout-body">
+    <div class="page-layout-content-container">
+      <div class="page-layout-content"
+        [style.padding.px]="noPadding ? 0 : null"
+      >
         <ng-content></ng-content>
       </div>
     </div>

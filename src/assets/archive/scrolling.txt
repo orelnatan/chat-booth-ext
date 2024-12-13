@@ -35,3 +35,24 @@ onScroll(event: Event): void {
     console.log('User scrolled to the left edge!');
   }
 }
+
+.................................................................................
+
+public scrollToTop(): void {
+  this.pageLayoutBody.nativeElement.scrollTop = 0;
+}
+
+public scrollToBottom(): void {
+  this.pageLayoutBody.nativeElement.scrollTop = this.pageLayoutBody.nativeElement.scrollHeight;
+}
+
+public scrollByPercentage(percentage: number): void {
+  const element: HTMLDivElement = this.pageLayoutBody.nativeElement;
+  const maxScrollTop: number = element.scrollHeight - element.clientHeight;
+
+  // Clamp the percentage between 0 and 100 to avoid invalid values
+  const clampedPercentage: number = Math.max(0, Math.min(percentage, 100));
+
+  // Calculate the scrollTop position based on the percentage
+  element.scrollTop = (clampedPercentage / 100) * maxScrollTop;
+}

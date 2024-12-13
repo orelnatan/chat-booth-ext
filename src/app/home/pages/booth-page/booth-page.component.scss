@@ -1,13 +1,6 @@
 
 .booth-page-main {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
   height: 100%;
-
-  .booth-message {
-    padding: 10px;
-    border-radius: 20px;
-    background: var(--color-chat-message-bg);
-  }
+  padding: 15px;
+  overflow: auto;
 }

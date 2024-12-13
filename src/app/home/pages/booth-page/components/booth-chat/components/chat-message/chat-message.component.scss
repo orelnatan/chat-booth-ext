@@ -1,0 +1,11 @@
+
+.chat-message-main {
+  width: 100%;
+
+  .message-container {
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    background: var(--color-chat-message-bg);
+  }
+}

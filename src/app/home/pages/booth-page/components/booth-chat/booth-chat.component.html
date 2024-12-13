@@ -1,0 +1,7 @@
+
+<div class="booth-chat-main">
+  @for (message of messages; track $index) {
+    <chat-message 
+      [message]="message" />
+  }
+</div>

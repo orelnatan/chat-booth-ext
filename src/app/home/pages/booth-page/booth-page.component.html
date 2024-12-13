@@ -1,7 +1,7 @@
 
 @let booth = booth$ | async;
 
-<page-layout>
+<page-layout noPadding>
   <layout-header header-primary>
     <booth-header 
       [id]="booth?.id" 
@@ -9,12 +9,22 @@
     </booth-header>
   </layout-header>
 
-  <div class="booth-page-main">
+  <div class="booth-page-main" #boothChatContainer 
+    [intersectionObserver]="scrollMarker"
+    [rootMargin]="10"
+    [threshold]="0.1"
+    (intersect)="messages && handleIntersect()" 
+  >
+    <span #boothScrollMarker></span>
+    @if(loading) {
+      Loading Older Messages ...
+    }
+
     @if(messages) {
-      @for (message of messages; track $index) {
-        <div class="booth-message shallow-shadow">
-          <p>{{ message.content }}</p></div>
-      }
+      <booth-chat 
+        [messages]="messages"
+        (afterViewInit)="chatViewInit()"
+      />
     } @else {
       Loading Messages ...
     }
@@ -23,7 +33,7 @@
   <layout-footer footer-primary>
     <booth-footer
       [pending]="sending"
-      (onMessage)="handleMessage($event)">
+      (message)="handleMessage($event)">
     </booth-footer>
   </layout-footer>
 </page-layout>

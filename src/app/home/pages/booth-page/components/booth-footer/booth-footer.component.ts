@@ -15,12 +15,12 @@ import { FormsModule } from "@angular/forms";
 export class BoothFooterComponent {
   @Input() pending: boolean;
 
-  @Output() onMessage: EventEmitter<string> = new EventEmitter();
+  @Output() message: EventEmitter<string> = new EventEmitter();
 
   value: string;
 
   sendMessage(): void {
-    this.onMessage.emit(this.value);
+    this.message.emit(this.value);
 
     this.value = null;
   }
